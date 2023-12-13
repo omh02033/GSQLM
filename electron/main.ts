@@ -29,6 +29,12 @@ async function createWindow() {
       nodeIntegration: true,
       contextIsolation: false,
     },
+    width: 1200,
+    height: 700,
+    titleBarStyle: 'hidden',
+    trafficLightPosition: { x: 70, y: 10 },
+    frame: false,
+    transparent: true,
   });
 
   if (process.env.VITE_DEV_SERVER_URL) {
