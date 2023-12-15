@@ -5,7 +5,7 @@ import { globalCss, styled } from '@/stitches.config';
 
 import './node-api';
 
-import { Main } from './pages';
+import { Connect } from './pages';
 import { Hexile, NavBar } from './components';
 
 globalCss({
@@ -76,7 +76,7 @@ const Router = () => {
       <DragBar fillx />
       <MainFrame>
         <Routes>
-          <Route path="/" element={<Main />} />
+          <Route path="/" element={<Connect />} />
         </Routes>
       </MainFrame>
       <NavBar />

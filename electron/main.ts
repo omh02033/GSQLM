@@ -35,6 +35,7 @@ async function createWindow() {
     trafficLightPosition: { x: 70, y: 10 },
     frame: false,
     transparent: true,
+    resizable: false,
   });
 
   if (process.env.VITE_DEV_SERVER_URL) {

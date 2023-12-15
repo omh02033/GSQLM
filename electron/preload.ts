@@ -36,6 +36,9 @@ const safeDOM = {
 function useLoading() {
   const className = `loaders-css__square-spin`;
   const styleContent = `
+body {
+  background: #343434;
+}
 .${className},
 .${className}:before,
 .${className}:after {
