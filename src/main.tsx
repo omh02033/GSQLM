@@ -2,10 +2,11 @@ import React, { useEffect } from 'react';
 import ReactDOM from 'react-dom/client';
 import { HashRouter, Routes, Route, useNavigate } from 'react-router-dom';
 import { globalCss, styled } from '@/stitches.config';
+import { RecoilRoot } from 'recoil';
 
 import './node-api';
 
-import { Connect } from './pages';
+import { Connect, Main } from './pages';
 import { Hexile, NavBar } from './components';
 
 globalCss({
@@ -55,7 +56,7 @@ const DragBar = styled(Hexile, {
   top: 0,
   left: 0,
   '-webkit-app-region': 'drag',
-  height: '30px'
+  height: '30px',
 });
 
 const Router = () => {
@@ -77,6 +78,7 @@ const Router = () => {
       <MainFrame>
         <Routes>
           <Route path="/" element={<Connect />} />
+          <Route path="/main" element={<Main />} />
         </Routes>
       </MainFrame>
       <NavBar />
@@ -87,7 +89,9 @@ const Router = () => {
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
   <React.StrictMode>
     <HashRouter>
-      <Router />
+      <RecoilRoot>
+        <Router />
+      </RecoilRoot>
     </HashRouter>
   </React.StrictMode>
 );

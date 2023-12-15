@@ -1,2 +1,3 @@
-import './notification';
+import './database';
+import './dialog';
 import './popup';

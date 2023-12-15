@@ -3,7 +3,7 @@ import { Hexile, Vexile } from '@/components';
 
 export const Wrapper = styled(Vexile, {
   position: 'absolute',
-  zIndex: 10,
+  zIndex: 1000,
   transform: 'translateY(-50%)',
   top: '50%',
   left: 0,
@@ -39,4 +39,31 @@ export const SubTitle = styled('span', {
   color: '#ffffff88',
   fontWeight: 500,
   fontSize: '1.7rem',
+});
+
+export const TableWrapper = styled(Vexile, {
+  flex: 1,
+  overflow: 'auto',
+  padding: '0 5rem 5rem 0',
+  'scrollbar-width': 'none',
+  '&::-webkit-scrollbar': {
+    display: 'none',
+  },
+});
+
+export const TableBox = styled(Hexile, {
+  borderRadius: '0 4rem 4rem 0',
+  cursor: 'pointer',
+  padding: '1rem 2rem 1rem 5rem',
+  fontSize: '2.5rem',
+  color: '#f9f9f9',
+  '&:hover': {
+    background: '#ffffff2b',
+  },
+  '&:active': {
+    background: '#ffffff19',
+  },
+  '&.current': {
+    background: '#a476e9',
+  },
 });

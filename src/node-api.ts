@@ -6,7 +6,6 @@ ipcRenderer.on('main-process-message', (_event, ...args) => {
   console.log('[Receive Main-process message]:', ...args);
 });
 
-lstat(cwd())
-  .catch((err) => {
-    console.error(err);
-  });
+lstat(cwd()).catch((err) => {
+  console.error(err);
+});

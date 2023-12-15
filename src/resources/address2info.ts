@@ -1,6 +1,6 @@
 export const address2info = (address: string): {
-  username: string;
-  address: string;
+  user: string;
+  host: string;
   port: number;
   password: string;
   database: string;
@@ -12,9 +12,9 @@ export const address2info = (address: string): {
   const ap = p3[1].split(':');
 
   return {
-    username: up[0],
+    user: up[0],
     password: up[1],
-    address: ap[0],
+    host: ap[0],
     port: +ap[1],
     database: p2[1],
   };

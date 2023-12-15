@@ -1,4 +1,4 @@
-import { Vexile } from '@/components';
+import { Hexile } from '@/components';
 import { styled } from '@/stitches.config';
 
 export const Wrapper = styled('form', {
@@ -7,6 +7,7 @@ export const Wrapper = styled('form', {
   height: '100%',
   justifyContent: 'center',
   alignItems: 'center',
+  position: 'relative',
 });
 
 export const Input = styled('input', {
@@ -37,6 +38,31 @@ export const Submit = styled('input', {
   cursor: 'pointer',
   '&:disabled': {
     background: 'linear-gradient(to top, #6a6a6a, #737373)',
-    cursor: 'not-allowed'
-  }
+    cursor: 'not-allowed',
+  },
+});
+export const LoadBtn = styled(Hexile, {
+  cursor: 'not-allowed',
+  background: 'linear-gradient(to top, #5929a0, #6734b2)',
+  borderRadius: '1rem',
+  padding: '1.5rem 3.2rem',
+  position: 'relative',
+  color: '#fff0',
+  fontWeight: 700,
+});
+export const Spinner = styled('div', {
+  position: 'absolute',
+  transform: 'translate(-50%, -50%)',
+  top: '50%',
+  left: '50%',
+});
+
+export const ErrorSpan = styled('span', {
+  position: 'absolute',
+  bottom: '30%',
+  transform: 'translate(-50%, -50%)',
+  left: '50%',
+  color: '#c70f0f',
+  fontSize: '3rem',
+  fontWeight: 500,
 });

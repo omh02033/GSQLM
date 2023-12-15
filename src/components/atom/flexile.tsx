@@ -62,7 +62,7 @@ export const HexileCore = styled('div', {
       },
     },
   },
-})
+});
 
 export const VexileCore = styled('div', {
   display: 'flex',
@@ -126,29 +126,29 @@ export const VexileCore = styled('div', {
       },
     },
   },
-})
+});
 
 interface FlexileProps {
-  fillx?: boolean
-  filly?: boolean
-  gap?: number
-  padding?: number
-  linebreak?: boolean
-  paddingx?: number
-  paddingy?: number
-  keepsize?: boolean
-  relative?: boolean
-  scrolly?: boolean
+  fillx?: boolean;
+  filly?: boolean;
+  gap?: number;
+  padding?: number;
+  linebreak?: boolean;
+  paddingx?: number;
+  paddingy?: number;
+  keepsize?: boolean;
+  relative?: boolean;
+  scrolly?: boolean;
 }
 
 interface VexileProps extends FlexileProps {
-  x?: 'right' | 'left' | 'center'
-  y?: 'top' | 'bottom' | 'center' | 'space'
+  x?: 'right' | 'left' | 'center';
+  y?: 'top' | 'bottom' | 'center' | 'space';
 }
 
 interface HexileProps extends FlexileProps {
-  x?: 'right' | 'left' | 'center' | 'space'
-  y?: 'top' | 'bottom' | 'center'
+  x?: 'right' | 'left' | 'center' | 'space';
+  y?: 'top' | 'bottom' | 'center';
 }
 
 export const Vexile: React.FC<
@@ -172,7 +172,7 @@ export const Vexile: React.FC<
     }}
     {...props}
   />
-)
+);
 
 export const Hexile: React.FC<
   HexileProps & React.HTMLAttributes<HTMLDivElement>
@@ -195,4 +195,4 @@ export const Hexile: React.FC<
     }}
     {...props}
   />
-)
+);
