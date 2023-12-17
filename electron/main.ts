@@ -4,9 +4,10 @@ process.env.PUBLIC = app.isPackaged
   ? process.env.DIST
   : join(process.env.DIST_ELECTRON, '../public');
 
-import { app, BrowserWindow, shell, ipcMain } from 'electron';
+import { app, BrowserWindow, shell, ipcMain, Menu } from 'electron';
 import { release } from 'os';
 import { join } from 'path';
+import mysql from 'mysql2/promise';
 import './events';
 
 // Disable GPU Acceleration for Windows 7
@@ -16,6 +17,10 @@ if (release().startsWith('6.1')) app.disableHardwareAcceleration();
 if (process.platform === 'win32') app.setAppUserModelId(app.getName());
 
 export let mainWin: BrowserWindow | null = null;
+
+let SQL: mysql.Connection | null = null;
+global.SQL = SQL;
+// declare let SQL: mysql.Connection;
 
 export const preload = join(__dirname, './preload.js');
 export const url = process.env.VITE_DEV_SERVER_URL;
@@ -36,7 +41,97 @@ async function createWindow() {
     frame: false,
     transparent: true,
     resizable: false,
+    visualEffectState: 'inactive',
   });
+
+  const template: (Electron.MenuItemConstructorOptions | Electron.MenuItem)[] =
+    [
+      {
+        label: 'GSQLM',
+        submenu: [
+          {
+            role: 'quit',
+          },
+          {
+            role: 'close',
+          },
+          {
+            role: 'minimize',
+          },
+          {
+            role: 'hide',
+          },
+          {
+            type: 'separator',
+          },
+          {
+            role: 'reload',
+            visible: !!process.env.VITE_DEV_SERVER_URL,
+          },
+          {
+            role: 'forceReload',
+            visible: !!process.env.VITE_DEV_SERVER_URL,
+          },
+          {
+            type: 'separator',
+            visible: !!process.env.VITE_DEV_SERVER_URL,
+          },
+          {
+            role: 'appMenu',
+          },
+          {
+            role: 'about',
+          },
+        ],
+      },
+      {
+        label: 'Connect',
+        submenu: [
+          {
+            label: 'New Connection',
+            accelerator: 'CmdOrCtrl+N',
+            click: createWindow,
+          },
+          {
+            label: 'Disconnect',
+            click: () => {
+              mainWin?.webContents.send('disconnect', '');
+            },
+          },
+        ],
+      },
+      {
+        label: 'Edit',
+        submenu: [
+          {
+            role: 'copy',
+          },
+          {
+            role: 'paste',
+          },
+          {
+            role: 'cut',
+          },
+          {
+            role: 'delete',
+          },
+          {
+            role: 'redo',
+          },
+          {
+            role: 'selectAll',
+          },
+          {
+            role: 'selectNextTab',
+          },
+          {
+            role: 'selectPreviousTab',
+          },
+        ],
+      },
+    ];
+  const menu = Menu.buildFromTemplate(template);
+  Menu.setApplicationMenu(menu);
 
   if (process.env.VITE_DEV_SERVER_URL) {
     // electron-vite-vue#298
@@ -48,7 +143,10 @@ async function createWindow() {
   }
 
   mainWin.webContents.on('did-finish-load', () => {
-    mainWin?.webContents.send('main-process-message', new Date().toLocaleString());
+    mainWin?.webContents.send(
+      'main-process-message',
+      new Date().toLocaleString()
+    );
   });
 
   // Make all links open with the browser, not with the application
@@ -60,8 +158,7 @@ async function createWindow() {
 
 app.whenReady().then(createWindow);
 
-app.on('will-quit', () => {
-});
+app.on('will-quit', () => {});
 app.on('window-all-closed', () => {
   mainWin = null;
   if (process.platform !== 'darwin') app.quit();

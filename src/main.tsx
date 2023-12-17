@@ -2,12 +2,13 @@ import React, { useEffect } from 'react';
 import ReactDOM from 'react-dom/client';
 import { HashRouter, Routes, Route, useNavigate } from 'react-router-dom';
 import { globalCss, styled } from '@/stitches.config';
-import { RecoilRoot } from 'recoil';
+import { RecoilRoot, useResetRecoilState } from 'recoil';
+import { ipcRenderer } from 'electron';
 
 import './node-api';
 
 import { Connect, Main } from './pages';
-import { Hexile, NavBar } from './components';
+import { Hexile, NavBar, TableAtom, connectInfoAtom } from './components';
 
 globalCss({
   '@import': [
@@ -61,6 +62,8 @@ const DragBar = styled(Hexile, {
 
 const Router = () => {
   const goto = useNavigate();
+  const resetConnectInfo = useResetRecoilState(connectInfoAtom);
+  const resetTableInfo = useResetRecoilState(TableAtom);
 
   useEffect(() => {
     try {
@@ -70,7 +73,15 @@ const Router = () => {
       goto(`/${search}`);
     } catch {}
   }, [goto]);
-  useEffect(() => postMessage({ payload: 'removeLoading' }, '*'), []);
+  useEffect(() => {
+    postMessage({ payload: 'removeLoading' }, '*');
+
+    ipcRenderer.on('disconnect', (_, arg) => {
+      resetConnectInfo();
+      resetTableInfo();
+      goto('/');
+    });
+  }, []);
 
   return (
     <Wrapper fillx filly>

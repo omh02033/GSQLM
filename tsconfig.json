@@ -16,10 +16,10 @@
     "noEmit": true,
     "jsx": "react-jsx",
     "baseUrl": ".",
+    "typeRoots": ["electron/custom.d.ts"],
     "paths": {
       "@/*": ["./src/*"],
     },
-    "types": ["vite-plugin-svgr/client"]
   },
   "include": ["src", "package.json", "electron"],
   "references": [{ "path": "./tsconfig.node.json" }]

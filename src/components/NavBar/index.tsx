@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { TableAtom, Vexile } from '@/components';
+import { TableAtom, Vexile, connectInfoAtom } from '@/components';
 import {
   LogoContainer,
   SubTitle,
@@ -9,13 +9,14 @@ import {
   Wrapper,
 } from './style';
 import { ipcRenderer } from 'electron';
-import { useRecoilState } from 'recoil';
+import { useRecoilState, useRecoilValue } from 'recoil';
 
 import LogoImg from '@/assets/logo.png';
 
 export const NavBar: React.FC = () => {
   const [tables, setTables] = useState<Array<string>>([]);
   const [currentTable, setCurrentTable] = useRecoilState(TableAtom);
+  const connectInfo = useRecoilValue(connectInfoAtom);
 
   useEffect(() => {
     ipcRenderer.on('GetTables', (_, tables) => {
@@ -29,6 +30,10 @@ export const NavBar: React.FC = () => {
       }
     });
   }, []);
+
+  useEffect(() => {
+    if (!connectInfo.host) setTables([]);
+  }, [connectInfo]);
 
   return (
     <Wrapper>
@@ -51,10 +56,11 @@ export const NavBar: React.FC = () => {
       </LogoContainer>
       {tables.length > 0 && (
         <TableWrapper fillx gap={1}>
-          {tables.map((tableName) => (
+          {tables.map((tableName, idx) => (
             <TableBox
               className={currentTable === tableName ? 'current' : ''}
               onClick={() => setCurrentTable(tableName)}
+              key={`tb${idx}`}
             >
               {tableName}
             </TableBox>

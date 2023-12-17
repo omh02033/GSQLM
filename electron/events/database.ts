@@ -1,4 +1,4 @@
-import { ipcMain } from 'electron';
+import { BrowserWindow, dialog, ipcMain } from 'electron';
 import mysql from 'mysql2/promise';
 
 interface ConnectInfo {
@@ -8,8 +8,6 @@ interface ConnectInfo {
   password: string;
   database: string;
 }
-
-let SQL: mysql.Connection;
 
 ipcMain.on('connectTest', async (event, args: ConnectInfo) => {
   try {
@@ -22,9 +20,9 @@ ipcMain.on('connectTest', async (event, args: ConnectInfo) => {
 });
 
 ipcMain.on('connectSQL', async (event, args: ConnectInfo) => {
-  SQL = await mysql.createConnection({ ...args });
+  global.SQL = await mysql.createConnection({ ...args });
 
-  const [results] = await SQL.execute(
+  const [results] = await global.SQL.execute(
     `SELECT table_name FROM information_schema.tables WHERE table_schema = ?`,
     [args.database]
   );
@@ -33,3 +31,30 @@ ipcMain.on('connectSQL', async (event, args: ConnectInfo) => {
     (results as mysql.RowDataPacket[]).map((e) => e.TABLE_NAME)
   );
 });
+
+ipcMain.on(
+  'selectTable',
+  async (event, { table, page }: { table: string; page: number }) => {
+    if (!global.SQL) {
+      dialog.showErrorBox('Error', 'Not Found SQL variable');
+      return;
+    }
+    if (page < 0) return;
+    const totalLength = (
+      (
+        await global.SQL.execute(`SELECT COUNT(*) AS CNT FROM ${table}`)
+      )[0] as any
+    )[0]['CNT'];
+    const maxPage: number = Math.ceil(totalLength / 50);
+
+    const [results, fields] = await global.SQL.execute(
+      `SELECT * FROM ${table} LIMIT 50 OFFSET ${50 * (page - 1)}`
+    );
+    const schema = fields.map((field) => field.name);
+    event.sender.send('GetData', {
+      maxPage,
+      results,
+      schema,
+    });
+  }
+);

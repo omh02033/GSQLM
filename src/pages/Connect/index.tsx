@@ -42,6 +42,7 @@ export const Connect: React.FC = () => {
   const connectDatabase = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
+    setIsError(false);
     setIsLoading(true);
 
     setConnectInfo(address2info(address));
